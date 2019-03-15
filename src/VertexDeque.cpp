@@ -1,12 +1,10 @@
 #include "hdr/VertexDeque.hpp"
 #include <stdexcept>
 
-const size_t MAX_SIZE = 1000;
-
 VertexDeque::VertexDeque()
 : mVertices{}
 , mFirst {0}
-, mSizeLimit { MAX_SIZE }
+, mSizeLimit { 0 }
 , mFixedSize { true }
 {
 	mVertices.reserve(1000);
@@ -15,7 +13,7 @@ VertexDeque::VertexDeque()
 VertexDeque::VertexDeque(size_t size)
 : mVertices {size}
 , mFirst {0}
-, mSizeLimit { size > MAX_SIZE ? size : MAX_SIZE }
+, mSizeLimit { size / 4 }
 , mFixedSize { true }
 {
 
@@ -44,55 +42,21 @@ void VertexDeque::push(const sf::Vertex& object)
 
 	if(size() > mSizeLimit)
 	{
-		if(mFirst > 0)
-		{
-			flush();
-		} else
-		{
-			if(mFixedSize)
-			{
-				//fixed size array will have some datas lost over time
-				pop();
-			}
-			else
-			{
-				mSizeLimit = 1.2 * mSizeLimit ;
-			}
-		}
+		flush();
 	}
 }
 
 void VertexDeque::pop()
 {
-	mFirst++;
+	if(mFirst >= mVertices.size())
+		throw std::logic_error("Segmentation Fault (Core Dump) : popping unexisting element");
 
-	if(size()  > mSizeLimit)
-	{
-		flush();
-	}
+	mFirst++;
 }
 
 void VertexDeque::clear()
 {
 	mVertices.clear();
-}
-
-void VertexDeque::reserve(size_t r)
-{
-	if(r < mVertices.size())
-	{
-		mVertices.shrink_to_fit();
-		mSizeLimit = mVertices.size();
-	} else
-	{
-		mVertices.reserve(r);
-		mSizeLimit = r;
-	}
-}
-
-void VertexDeque::setFixedSize(bool fxSz)
-{
-	mFixedSize = fxSz;
 }
 
 void VertexDeque::flush()

@@ -18,9 +18,6 @@ public:
     void push(const sf::Vertex& object);
     void pop();
     void clear();
-    void reserve(size_t r);
-
-    void setFixedSize(bool fxSz);
 
 private:
     void flush();

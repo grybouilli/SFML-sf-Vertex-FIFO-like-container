@@ -12,8 +12,6 @@ int main()
 	sf::Vertex v(sf::Vector2f(100,100), sf::Color::White);
 
 	VertexDeque vertices_2 {};
-	vertices_2.reserve(limitSz);
-	//
 	sf::Clock clock;
 	for(auto i = 0; i != toPush; ++i)
 	{
