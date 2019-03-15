@@ -42,18 +42,22 @@ void VertexDeque::push(const sf::Vertex& object)
 {
 	mVertices.push_back(object);
 
-	if(size() > mSizeLimit && mFirst > 0)
+	if(size() > mSizeLimit)
 	{
-		flush();
-	} else
-	{
-		if(mFixedSize)
+		if(mFirst > 0)
 		{
-			//fixed size array will have some datas lost over time
-			pop();
+			flush();
 		} else
 		{
-			mSizeLimit = 1.2 * mSizeLimit ;
+			if(mFixedSize)
+			{
+				//fixed size array will have some datas lost over time
+				pop();
+			}
+			else
+			{
+				mSizeLimit = 1.2 * mSizeLimit ;
+			}
 		}
 	}
 }
